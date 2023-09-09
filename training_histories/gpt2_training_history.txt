@@ -1,0 +1,29 @@
+Found cached dataset json (/root/.cache/huggingface/datasets/json/default-ca0f43188891a3b0/0.0.0/e347ab1c932092252e717ff3f949105a4dd28b27e842dd53157d2f72e276c2e4)
+100% 1/1 [00:00<00:00, 650.58it/s]
+Loading cached split indices for dataset at /root/.cache/huggingface/datasets/json/default-ca0f43188891a3b0/0.0.0/e347ab1c932092252e717ff3f949105a4dd28b27e842dd53157d2f72e276c2e4/cache-93bd915ab7ae0ea7.arrow and /root/.cache/huggingface/datasets/json/default-ca0f43188891a3b0/0.0.0/e347ab1c932092252e717ff3f949105a4dd28b27e842dd53157d2f72e276c2e4/cache-51d46ae5733fa26c.arrow
+100% 61/61 [00:14<00:00,  4.09it/s]
+Raw model: eval_ppl=tensor(353.3120, device='cuda:0') eval_epoch_loss=tensor(5.8674, device='cuda:0')
+100% 542/542 [05:30<00:00,  1.64it/s]
+100% 61/61 [00:13<00:00,  4.47it/s]
+Epoch: 0: train_ppl=tensor(2.0876, device='cuda:0') train_epoch_loss=tensor(0.7360, device='cuda:0') eval_ppl=tensor(1.7429, device='cuda:0') eval_epoch_loss=tensor(0.5555, device='cuda:0')
+100% 542/542 [05:30<00:00,  1.64it/s]
+100% 61/61 [00:13<00:00,  4.46it/s]
+Epoch: 1: train_ppl=tensor(1.7615, device='cuda:0') train_epoch_loss=tensor(0.5662, device='cuda:0') eval_ppl=tensor(1.7188, device='cuda:0') eval_epoch_loss=tensor(0.5416, device='cuda:0')
+100% 542/542 [05:30<00:00,  1.64it/s]
+100% 61/61 [00:13<00:00,  4.46it/s]
+Epoch: 2: train_ppl=tensor(1.6906, device='cuda:0') train_epoch_loss=tensor(0.5251, device='cuda:0') eval_ppl=tensor(1.7133, device='cuda:0') eval_epoch_loss=tensor(0.5384, device='cuda:0')
+trainable params: 294912 || all params: 124734720 || trainable%: 0.23643136409814364
+Found cached dataset json (/root/.cache/huggingface/datasets/json/default-ca0f43188891a3b0/0.0.0/e347ab1c932092252e717ff3f949105a4dd28b27e842dd53157d2f72e276c2e4)
+100% 1/1 [00:00<00:00, 622.39it/s]
+Loading cached split indices for dataset at /root/.cache/huggingface/datasets/json/default-ca0f43188891a3b0/0.0.0/e347ab1c932092252e717ff3f949105a4dd28b27e842dd53157d2f72e276c2e4/cache-93bd915ab7ae0ea7.arrow and /root/.cache/huggingface/datasets/json/default-ca0f43188891a3b0/0.0.0/e347ab1c932092252e717ff3f949105a4dd28b27e842dd53157d2f72e276c2e4/cache-51d46ae5733fa26c.arrow
+100% 61/61 [00:14<00:00,  4.29it/s]
+Raw model: eval_ppl=tensor(353.3120, device='cuda:0') eval_epoch_loss=tensor(5.8674, device='cuda:0')
+100% 542/542 [04:26<00:00,  2.04it/s]
+100% 61/61 [00:14<00:00,  4.28it/s]
+Epoch: 0: train_ppl=tensor(3.5142, device='cuda:0') train_epoch_loss=tensor(1.2568, device='cuda:0') eval_ppl=tensor(2.0034, device='cuda:0') eval_epoch_loss=tensor(0.6948, device='cuda:0')
+100% 542/542 [04:26<00:00,  2.03it/s]
+100% 61/61 [00:14<00:00,  4.29it/s]
+Epoch: 1: train_ppl=tensor(2.1113, device='cuda:0') train_epoch_loss=tensor(0.7473, device='cuda:0') eval_ppl=tensor(1.9142, device='cuda:0') eval_epoch_loss=tensor(0.6493, device='cuda:0')
+100% 542/542 [04:26<00:00,  2.03it/s]
+100% 61/61 [00:14<00:00,  4.29it/s]
+Epoch: 2: train_ppl=tensor(2.0479, device='cuda:0') train_epoch_loss=tensor(0.7168, device='cuda:0') eval_ppl=tensor(1.8943, device='cuda:0') eval_epoch_loss=tensor(0.6388, device='cuda:0')

@@ -1,0 +1,15 @@
+// self and cls color for python
+{
+    "editor.semanticTokenColorCustomizations": {
+        "[Default Dark+]": {
+            "rules": {
+                "selfParameter": "#569CD6",
+                "clsParameter": "#569CD6"
+            },
+        },
+    },
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.autopep8"
+    },
+    "python.formatting.provider": "none"
+}

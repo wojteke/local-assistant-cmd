@@ -1,0 +1,11 @@
+numpy
+--find-links https://download.pytorch.org/whl/cu117/torch_stable.html
+torch
+torchvision
+torchaudio
+git+https://github.com/huggingface/peft.git
+transformers
+datasets
+sacrebleu
+fastapi
+uvicorn

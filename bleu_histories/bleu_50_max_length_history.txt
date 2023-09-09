@@ -1,0 +1,19 @@
+2023-06-17 16:46:53.143628: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT
+Found cached dataset json (/root/.cache/huggingface/datasets/json/default-1780e084e2d96dd4/0.0.0/e347ab1c932092252e717ff3f949105a4dd28b27e842dd53157d2f72e276c2e4)
+100% 1/1 [00:00<00:00, 676.17it/s]
+Loading cached split indices for dataset at /root/.cache/huggingface/datasets/json/default-1780e084e2d96dd4/0.0.0/e347ab1c932092252e717ff3f949105a4dd28b27e842dd53157d2f72e276c2e4/cache-f8ed66d7c728ddf1.arrow and /root/.cache/huggingface/datasets/json/default-1780e084e2d96dd4/0.0.0/e347ab1c932092252e717ff3f949105a4dd28b27e842dd53157d2f72e276c2e4/cache-145e6d94b2cd00b8.arrow
+Token indices sequence length is longer than the specified maximum sequence length for this model (1050 > 1024). Running this sequence through the model will result in indexing errors
+100% 50/50 [05:03<00:00,  6.07s/it]
+/content/ai-assistant/evaluation.py:67: FutureWarning: load_metric is deprecated and will be removed in the next major version of datasets. Use 'evaluate.load' instead, from the new library 🤗 Evaluate: https://huggingface.co/docs/evaluate
+  sacrebleu = load_metric('sacrebleu')
+Model: gpt2_epoch_2 BLEU Score: 96.12364699560827
+100% 50/50 [06:13<00:00,  7.46s/it]
+Model: gpt2_lora_epoch_2 BLEU Score: 84.41354903625525
+100% 50/50 [09:26<00:00, 11.33s/it]
+Model: gpt2-medium_epoch_2 BLEU Score: 95.97636308674201
+100% 50/50 [13:16<00:00, 15.93s/it]
+Model: gpt2-medium_lora_epoch_2 BLEU Score: 78.48435738892528
+100% 50/50 [14:36<00:00, 17.53s/it]
+Model: gpt2-large_epoch_2 BLEU Score: 95.0081249870088
+100% 50/50 [17:00<00:00, 20.42s/it]
+Model: gpt2-large_lora_epoch_2 BLEU Score: 96.31567226901525

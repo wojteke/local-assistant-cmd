@@ -1,0 +1,204 @@
+﻿<UserControl x:Class="AI_Assistant.Views.ChatView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AI_Assistant.Views" 
+			 xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp" 
+			 xmlns:models="clr-namespace:AI_Assistant.Models"
+			 xmlns:System="clr-namespace:System;assembly=mscorlib"
+			 mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+			 MinWidth="300">
+	<UserControl.Resources>
+		<ObjectDataProvider x:Key="aiModel"
+			MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+			<ObjectDataProvider.MethodParameters>
+				<x:Type TypeName="models:AIModel"/>
+			</ObjectDataProvider.MethodParameters>
+		</ObjectDataProvider>
+
+
+	</UserControl.Resources>
+	<Grid Margin="15">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition/>
+			<RowDefinition Height="auto"/>
+		</Grid.RowDefinitions>
+		<Grid Margin="10">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="Auto" />
+			</Grid.ColumnDefinitions>
+			<StackPanel VerticalAlignment="Center" HorizontalAlignment="Left">
+				<TextBlock Text = "Current Model:"
+						   Foreground="White"
+						   FontSize="14"
+						   Margin="0 0 0 10"
+						   />
+				<ComboBox ItemsSource="{Binding Source={StaticResource aiModel}}"
+						  IsEnabled="{Binding IsConversationEmpty}"
+						  MinWidth="200"
+					      SelectedItem="{Binding AIModel}"/>
+			</StackPanel>
+			<Button Grid.Column="1" 
+					Margin="5"
+						Width="auto" 
+						Height="auto" 
+						Background="Transparent" 
+						BorderBrush="Transparent"
+						HorizontalAlignment="Right"
+						BorderThickness="0"
+						Command="{Binding OpenSettingsPanelCommand}"
+						Style="{StaticResource CustomButtonStyle}">
+				<Button.Content>
+					<Border 
+						Width="50" 
+						Height="50"
+						CornerRadius="10"
+						Padding="5"
+						VerticalAlignment="Bottom" Background="#24877B">
+						<Border.Effect>
+							<DropShadowEffect BlurRadius="15" 
+								  ShadowDepth="3"
+								  Direction="270"
+								  Opacity="0.5" 
+								  Color="#1f1f1f"/>
+						</Border.Effect>
+						<fa:IconBlock Icon="Gear" FontSize="22" Foreground="White" Margin="0" />
+					</Border>
+				</Button.Content>
+			</Button>
+			<Button Grid.Column="2" 
+					Margin="5"
+						Width="auto" 
+						Height="auto" 
+						Background="Transparent" 
+						BorderBrush="Transparent"
+						HorizontalAlignment="Right"
+						BorderThickness="0"
+						Command="{Binding ClearConversationCommand}"
+						Style="{StaticResource CustomButtonStyle}">
+				<Button.Content>
+					<Border 
+						Width="50" 
+						Height="50"
+						CornerRadius="10"
+						Padding="5"
+						VerticalAlignment="Bottom" Background="#E76F51">
+						<Border.Effect>
+							<DropShadowEffect BlurRadius="15" 
+								  ShadowDepth="3"
+								  Direction="270"
+								  Opacity="0.5" 
+								  Color="#1f1f1f"/>
+						</Border.Effect>
+						<fa:IconBlock Icon="TrashAlt" FontSize="22" Foreground="White" Margin="0" />
+					</Border>
+				</Button.Content>
+			</Button>
+		</Grid>
+		<ListView 
+			Grid.Row="1"
+			x:Name="chatListView"
+			ScrollViewer.VerticalScrollBarVisibility="Auto"
+				  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+				  Background="Transparent" 
+				  BorderBrush="Transparent"
+				  ItemsSource="{Binding Conversation}"
+				  HorizontalAlignment="Stretch">
+			<ListView.ItemContainerStyle>
+				<Style TargetType="{x:Type ListViewItem}">
+					<Setter Property="Background" Value="Transparent" />
+					<Setter Property="Template">
+						<Setter.Value>
+							<ControlTemplate TargetType="{x:Type ListViewItem}">
+								<ContentPresenter />
+							</ControlTemplate>
+						</Setter.Value>
+					</Setter>
+				</Style>
+			</ListView.ItemContainerStyle>
+			<ListView.Style>
+				<Style TargetType="ListView">
+					<Setter Property="Visibility" Value="Collapsed"/>
+					<Style.Triggers>
+						<DataTrigger Binding="{Binding SettingsViewModel.SettingsVisible}" Value="False">
+							<Setter Property="Visibility" Value="Visible"/>
+						</DataTrigger>
+					</Style.Triggers>
+				</Style>
+			</ListView.Style>
+			<ListView.ItemTemplate>
+				<DataTemplate>
+					<ContentPresenter Content="{Binding View}" Margin="10"/>
+				</DataTemplate>
+			</ListView.ItemTemplate>
+		</ListView>
+		<Border Grid.Row="1">
+			<ContentPresenter Content="{Binding SettingsViewModel.View}"/>
+			<Border.Style>
+				<Style TargetType="Border">
+					<Setter Property="Visibility" Value="Collapsed"/>
+					<Style.Triggers>
+						<DataTrigger Binding="{Binding SettingsViewModel.SettingsVisible}" Value="True">
+							<Setter Property="Visibility" Value="Visible"/>
+						</DataTrigger>
+					</Style.Triggers>
+				</Style>
+			</Border.Style>
+		</Border>
+			
+		<Border Grid.Row="2" 
+				Background="#2e2e2e" 
+				CornerRadius="10" 
+				BorderThickness="0"
+				Margin="10 10 10 10" 
+				Padding="10"
+				Height="Auto">
+			<Border.Effect>
+				<DropShadowEffect BlurRadius="15" 
+								ShadowDepth="3"
+								Direction="270"
+								Opacity="0.5" 
+								Color="#1f1f1f"/>
+			</Border.Effect>
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition/>
+					<ColumnDefinition Width="auto"/>
+				</Grid.ColumnDefinitions>
+				<TextBox 
+					x:Name="userInputTextBox"
+					Foreground="White" 
+						 TextWrapping="Wrap" 
+						 BorderBrush="Transparent" 
+						 Background="Transparent"
+						 BorderThickness="0"
+						 CaretBrush="White"
+						 Text="{Binding UserInput, UpdateSourceTrigger=PropertyChanged}"
+						 AcceptsReturn="True"
+						 FontSize="14">
+					<TextBox.InputBindings>
+						<KeyBinding Key="ENTER" Command="{Binding SendMessageCommand}"/>
+						<KeyBinding Key="ENTER" Modifiers="Shift" Command="{Binding AddNewLineCommand}"/>
+					</TextBox.InputBindings>
+				</TextBox>
+				<Button Grid.Column="1" 
+						Width="auto" 
+						Height="auto" 
+						Background="Transparent" 
+						BorderBrush="Transparent"
+						BorderThickness="0"
+						Command="{Binding SendMessageCommand}"
+						Style="{StaticResource CustomButtonStyle}">
+					<Button.Content>
+						<fa:IconBlock Icon="PaperPlane" FontSize="22" Foreground="#24877B" Margin="5 0 0 0" />
+					</Button.Content>
+				</Button>
+			</Grid>
+		</Border>
+	</Grid>
+</UserControl>

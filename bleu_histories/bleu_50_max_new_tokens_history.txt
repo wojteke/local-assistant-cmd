@@ -1,0 +1,28 @@
+2023-06-17 13:38:36.552043: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT
+Found cached dataset json (/root/.cache/huggingface/datasets/json/default-1780e084e2d96dd4/0.0.0/e347ab1c932092252e717ff3f949105a4dd28b27e842dd53157d2f72e276c2e4)
+100% 1/1 [00:00<00:00, 713.92it/s]
+Loading cached split indices for dataset at /root/.cache/huggingface/datasets/json/default-1780e084e2d96dd4/0.0.0/e347ab1c932092252e717ff3f949105a4dd28b27e842dd53157d2f72e276c2e4/cache-f8ed66d7c728ddf1.arrow and /root/.cache/huggingface/datasets/json/default-1780e084e2d96dd4/0.0.0/e347ab1c932092252e717ff3f949105a4dd28b27e842dd53157d2f72e276c2e4/cache-145e6d94b2cd00b8.arrow
+Token indices sequence length is longer than the specified maximum sequence length for this model (1050 > 1024). Running this sequence through the model will result in indexing errors
+100% 50/50 [05:11<00:00,  6.23s/it]
+/content/ai-assistant/evaluation.py:67: FutureWarning: load_metric is deprecated and will be removed in the next major version of datasets. Use 'evaluate.load' instead, from the new library 🤗 Evaluate: https://huggingface.co/docs/evaluate
+  sacrebleu = load_metric('sacrebleu')
+Downloading builder script: 7.65kB [00:00, 3.37MB/s]       
+Model: gpt2_epoch_2 BLEU Score: 95.73844569085993
+Downloading model.safetensors: 100% 548M/548M [00:03<00:00, 141MB/s] 
+Downloading (…)neration_config.json: 100% 124/124 [00:00<00:00, 794kB/s]
+100% 50/50 [05:53<00:00,  7.08s/it]
+Model: gpt2_lora_epoch_2 BLEU Score: 90.49912571568873
+100% 50/50 [09:23<00:00, 11.27s/it]
+Model: gpt2-medium_epoch_2 BLEU Score: 96.10232273209304
+Downloading (…)lve/main/config.json: 100% 718/718 [00:00<00:00, 5.42MB/s]
+Downloading model.safetensors: 100% 1.52G/1.52G [00:07<00:00, 190MB/s]
+Downloading (…)neration_config.json: 100% 124/124 [00:00<00:00, 1.15MB/s]
+100% 50/50 [11:03<00:00, 13.28s/it]
+Model: gpt2-medium_lora_epoch_2 BLEU Score: 92.88530646282801
+100% 50/50 [14:14<00:00, 17.08s/it]
+Model: gpt2-large_epoch_2 BLEU Score: 94.81606346223462
+Downloading (…)lve/main/config.json: 100% 666/666 [00:00<00:00, 4.81MB/s]
+Downloading model.safetensors: 100% 3.25G/3.25G [00:12<00:00, 259MB/s]
+Downloading (…)neration_config.json: 100% 124/124 [00:00<00:00, 983kB/s]
+100% 50/50 [16:46<00:00, 20.12s/it]
+Model: gpt2-large_lora_epoch_2 BLEU Score: 95.97459329960844
