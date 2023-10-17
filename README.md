@@ -23,11 +23,11 @@ The models are hosted locally using FastAPI. The user interface, built using a s
 ## Working Demo
 
 1. Simple question - what is my IP?
-    ![What is my IP?](examples\example_ip.gif)
+    ![What is my IP?](examples/example_ip.gif)
 2. Files manipulation
-    ![Files manipulation](examples\example_files.gif)
+    ![Files manipulation](examples/example_files.gif)
 3. Generation options
-    ![Generation option](examples\example_generation_options.gif)
+    ![Generation option](examples/example_generation_options.gif)
 ## Installation
 
 1. Requirements:
