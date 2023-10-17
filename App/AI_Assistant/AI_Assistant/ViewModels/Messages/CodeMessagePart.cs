@@ -8,17 +8,19 @@ namespace AI_Assistant.ViewModels.Messages;
 public class CodeMessagePart : BaseMessagePart
 {
 	private readonly CodeExecutionService codeExecutionService;
+    private readonly ExplorerViewModel explorerViewModel;
 
-	public CodeMessagePart(MessageCodeView view, CodeExecutionService codeExecutionService): base(view)
+    public CodeMessagePart(MessageCodeView view, CodeExecutionService codeExecutionService, ExplorerViewModel explorerViewModel) : base(view)
 	{
 		this.codeExecutionService = codeExecutionService;
-		this.RunCodeCommand = new RelayCommand(ExecuteRunCodeCommandAsync);
+        this.explorerViewModel = explorerViewModel;
+        this.RunCodeCommand = new RelayCommand(ExecuteRunCodeCommandAsync);
 	}
 
 	public IRelayCommand RunCodeCommand { get; }
 
 	private async void ExecuteRunCodeCommandAsync()
 	{
-		await codeExecutionService.RunCmdAsync(this.Content);
+		await codeExecutionService.RunCmdAsync(explorerViewModel.CurrentPath, this.Content.Trim());
 	}
 }

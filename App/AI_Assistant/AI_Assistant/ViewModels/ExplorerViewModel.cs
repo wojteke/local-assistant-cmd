@@ -1,14 +1,9 @@
 ﻿using AI_Assistant.Services;
 using AI_Assistant.Views;
-using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace AI_Assistant.ViewModels;
@@ -30,7 +25,7 @@ public partial class ExplorerViewModel : ViewModelBase<ExplorerView>
 		this.fileService = fileService;
 		this.executionService = executionService;
 		this.executionService.CommandExecuted += ExecutionService_CommandExecuted;
-		this.CurrentPath = Directory.GetCurrentDirectory();
+		this.CurrentPath = fileService.GetCurrentDirectory();
 		this.RefreshEntries();
 	}
 

@@ -30,7 +30,7 @@ public class AIChatService
 
 		var requestContent = new StringContent(jsonObj, Encoding.UTF8, "application/json");
 
-		using var request = new HttpRequestMessage(HttpMethod.Post, "http://localhost:8000/api/stream/ai-response")
+		using var request = new HttpRequestMessage(HttpMethod.Post, "http://localhost:8000/api/stream-ai-response")
 		{
 			Content = requestContent
 		};

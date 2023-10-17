@@ -27,6 +27,7 @@ dataset["train"][0]
 # causing issues for some reasons
 # tokenizer.padding_side = 'left'
 
+
 def preprocess_function(examples):
     conversation = examples['conversation']
     prompt = generate_prompt(conversation)

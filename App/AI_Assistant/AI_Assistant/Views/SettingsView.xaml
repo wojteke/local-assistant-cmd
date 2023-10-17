@@ -32,8 +32,8 @@
 					<ColumnDefinition Width="Auto" />
 				</Grid.ColumnDefinitions>
 				<Label Content="Top P"/>
-				<Slider Grid.Row="1" Maximum="0.999" Minimum="0.001" SmallChange="0.001" Value="{Binding TopP, Mode=TwoWay}" TickPlacement="BottomRight" AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="3" TickFrequency="0.1" />
-				<TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding TopP, StringFormat=N3}" />
+				<Slider Grid.Row="1" Maximum="0.99" Minimum="0.01" SmallChange="0.01" Value="{Binding TopP, Mode=TwoWay}" TickPlacement="BottomRight" AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="2" TickFrequency="0.1" />
+				<TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding TopP, StringFormat=N2}" />
 			</Grid>
 			<Grid>
 				<Grid.RowDefinitions>
@@ -46,8 +46,21 @@
 				</Grid.ColumnDefinitions>
 				<Label Content="Top K"/>
 				<Slider Grid.Row="1" Maximum="100" Minimum="0" SmallChange="1"  Value="{Binding TopK, Mode=TwoWay}" TickPlacement="BottomRight" AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="1" TickFrequency="10"/>
-				<TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding TopK, StringFormat=N3}" />
+				<TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding TopK, StringFormat=N2}" />
 			</Grid>
-		</StackPanel>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Label Content="Top K"/>
+                <Slider Grid.Row="1" Maximum="500" Minimum="1" SmallChange="1"  Value="{Binding MaxNewTokens, Mode=TwoWay}" TickPlacement="BottomRight" AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="1" TickFrequency="10"/>
+                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding MaxNewTokens, StringFormat=N0}" />
+            </Grid>
+        </StackPanel>
 	</Grid>
 </UserControl>

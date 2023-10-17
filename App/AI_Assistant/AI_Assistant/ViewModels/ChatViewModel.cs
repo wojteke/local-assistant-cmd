@@ -2,22 +2,13 @@
 using AI_Assistant.Services;
 using AI_Assistant.Services.Messages;
 using AI_Assistant.Views;
-using AI_Assistant.Views.Messages;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.VisualBasic.ApplicationServices;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
-using System.Windows.Shapes;
-using System.Windows.Threading;
 
 namespace AI_Assistant.ViewModels;
 
@@ -25,6 +16,7 @@ public partial class ChatViewModel : ViewModelBase<ChatView>
 {
 	private readonly AIChatService chatService;
 	private readonly MessageFactory messageFactory;
+
 	[ObservableProperty]
 	[NotifyCanExecuteChangedFor(nameof(SendMessageCommand))]
 	private string userInput = string.Empty;
@@ -66,39 +58,30 @@ public partial class ChatViewModel : ViewModelBase<ChatView>
 
 
 
-		var aiResponse = messageFactory.CreateAIMessage();
-		this.Conversation.Add(aiResponse);
+		var currentResponse = messageFactory.CreateAIMessage();
+		this.Conversation.Add(currentResponse);
 
 		this.View.ScrollChatToEnd();
 		this.ClearConversationCommand.NotifyCanExecuteChanged();
 		OnPropertyChanged(nameof(IsConversationEmpty));
 		try
 		{
-			aiResponse.Generating = true;
+			currentResponse.Generating = true;
 			await Task.Run(async () =>
 			{
-				await aiResponse.BuildMessageUI(chatService.GetResponse(AIModel, SettingsViewModel.GetGenerationSettings(), Conversation.Where(x => x != aiResponse).Select(x => x.Content)));
-
-				//await foreach (var line in chatService.GetResponse(AIModel, SettingsViewModel.GetGenerationSettings(), Conversation.Where(x => x != aiResponse).Select(x => x.Content)))
-				//{
-				//	Application.Current.Dispatcher.Invoke(() =>
-				//	{
-				//		aiResponse.Content += line;
-				//		this.View.ScrollChatToEnd();
-				//	});
-				//}
+				var responseEnumerable = chatService.GetResponse(AIModel, SettingsViewModel.GetGenerationSettings(), Conversation.Where(x => x != currentResponse).Select(x => x.Content));
+                await currentResponse.SetContentAsync(responseEnumerable);
 			});
 		}
 		catch(Exception ex)
 		{
-			aiResponse.SetContent("Error when generating the response");
+			currentResponse.SetContent("Error when generating the response");
 			this.View.ScrollChatToEnd();
 			Trace.WriteLine(ex);
 		}
 		finally
 		{
-			aiResponse.Generating = false;
-			//aiResponse.BuildMessageUI();
+			currentResponse.Generating = false;
 		}
 	}
 

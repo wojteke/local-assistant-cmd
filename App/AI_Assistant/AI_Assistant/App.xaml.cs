@@ -40,12 +40,11 @@ public partial class App : Application
 	{
 		services.AddSingleton<MainWindow>();
 		services.AddSingleton<ChatView>();
-		// TODO: Add Message, MessageText and MessageCode Factory
-
+		
 		services.AddSingleton<ExplorerView>();
 		services.AddSingleton<SettingsView>();
 
-		services.AddTransient<MessageView>();
+        services.AddTransient<MessageView>();
 		services.AddTransient<MessageCodeView>();
 		services.AddTransient<MessageTextView>();
 	}

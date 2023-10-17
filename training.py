@@ -1,22 +1,19 @@
 import json
-import os
-import random
 import torch
-import transformers
-from transformers import GPT2Tokenizer, GPT2LMHeadModel
-from transformers import default_data_collator, get_linear_schedule_with_warmup
-from peft import get_peft_config, get_peft_model, get_peft_model_state_dict, LoraConfig, TaskType
+from torch.optim.lr_scheduler import LRScheduler
+from torch.optim import Optimizer
+from torch.utils.data import DataLoader
+from transformers import get_linear_schedule_with_warmup
+from transformers import GPT2LMHeadModel, GPT2Tokenizer
 from tqdm import tqdm
 from core.enums import GPT2Models
-from datasets import load_dataset
-from torch.utils.data import DataLoader
-import numpy as np
-from core.model_loader import create_gpt2_model, load_gpt2_model, save_model
-from training.train_data_loader import get_dataloaders, default_data_path
+from core.helpers import reset_seeds
+from core.model_loader import create_gpt2_model, save_model
+from training.train_data_loader import get_dataloaders
 from training.learning_rate_tools import get_loss_over_lr, find_lr
 
 
-device = 'cuda' if torch.cuda.is_available() else 'cpu'
+DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 
 class TrainingConfig(object):
@@ -27,14 +24,13 @@ class TrainingConfig(object):
     num_epochs: int
 
 
-def eval_model(tokenizer, model, eval_dataloader):
+def eval_model(tokenizer: GPT2Tokenizer, model: GPT2LMHeadModel, eval_dataloader: DataLoader):
     model.eval()
     eval_loss = 0
     eval_preds = []
     for step, batch in enumerate(tqdm(eval_dataloader)):
-        batch = {k: v.to(device) for k, v in batch.items()}
-        with torch.no_grad():
-            outputs = model(**batch)
+        batch = {k: v.to(DEVICE) for k, v in batch.items()}
+        outputs = model(**batch)
         loss = outputs.loss
         eval_loss += loss.detach().float()
         eval_preds.extend(
@@ -47,11 +43,11 @@ def eval_model(tokenizer, model, eval_dataloader):
     return eval_ppl, eval_epoch_loss
 
 
-def train_epoch(model, optimizer, lr_scheduler, train_dataloader):
+def train_epoch(model: GPT2LMHeadModel, optimizer: Optimizer, lr_scheduler: LRScheduler, train_dataloader: DataLoader):
     model.train()
     total_loss = 0
     for batch in tqdm(train_dataloader):
-        batch = {k: v.to(device) for k, v in batch.items()}
+        batch = {k: v.to(DEVICE) for k, v in batch.items()}
         outputs = model(**batch)
         loss = outputs.loss
         total_loss += loss.detach().float()
@@ -87,7 +83,7 @@ def train_loop(config: TrainingConfig):
     )
 
     # training and evaluation
-    model = model.to(device)
+    model = model.to(DEVICE)
     eval_ppl, eval_epoch_loss = eval_model(tokenizer, model, eval_dataloader)
     print(f"Raw model: {eval_ppl=} {eval_epoch_loss=}")
     for epoch in range(num_epochs):
@@ -128,11 +124,7 @@ if __name__ == '__main__':
     loras = [False, True]
     for model, lr, batch_size in zip(models, lrs, batch_sizes):
         for use_lora in loras:
-            seed_val = 42
-            random.seed(seed_val)
-            np.random.seed(seed_val)
-            torch.manual_seed(seed_val)
-            torch.cuda.manual_seed_all(seed_val)
+            reset_seeds()
             config = TrainingConfig()
             config.model_name = model
             config.use_lora = use_lora

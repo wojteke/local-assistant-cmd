@@ -5,8 +5,10 @@ from torch.utils.data import DataLoader
 from transformers import default_data_collator
 from core.prompter import generate_prompt
 
+
 def default_data_path():
     return os.path.join("data", "cmd_assistant_data_large.json")
+
 
 def get_eval_dataset(data_path=None) -> DatasetDict:
     if data_path is None:
@@ -14,10 +16,9 @@ def get_eval_dataset(data_path=None) -> DatasetDict:
     # loading dataset
     dataset = load_dataset("json", data_files=data_path)
     dataset = dataset["train"].train_test_split(test_size=0.1)
-    dataset["validation"] = dataset["test"]
     del dataset["test"]
-    del dataset["train"]
     return dataset
+
 
 def get_dataloaders(tokenizer, batch_size, data_path=None) -> Tuple[DataLoader, DataLoader]:
     if data_path is None:
@@ -26,8 +27,6 @@ def get_dataloaders(tokenizer, batch_size, data_path=None) -> Tuple[DataLoader, 
     dataset = load_dataset("json", data_files=data_path)
 
     dataset = dataset["train"].train_test_split(test_size=0.1)
-    dataset["validation"] = dataset["test"]
-    del dataset["test"]
 
     def preprocess_function(examples):
         conversation = examples['conversation']
@@ -47,12 +46,12 @@ def get_dataloaders(tokenizer, batch_size, data_path=None) -> Tuple[DataLoader, 
     )
 
     train_dataset = processed_datasets["train"]
-    eval_dataset = processed_datasets["validation"]
+    eval_dataset = processed_datasets["test"]
 
     train_dataloader = DataLoader(
         train_dataset, shuffle=True, collate_fn=default_data_collator, batch_size=batch_size, pin_memory=True)
-    
+
     eval_dataloader = DataLoader(
         eval_dataset, collate_fn=default_data_collator, batch_size=batch_size, pin_memory=True)
-    
+
     return train_dataloader, eval_dataloader

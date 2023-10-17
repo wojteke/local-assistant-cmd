@@ -3,7 +3,7 @@ from typing import Tuple
 import torch
 
 
-device = 'cuda' if torch.cuda.is_available() else 'cpu'
+DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 
 def get_loss_over_lr(model, train_dataloader, optimizer, smallest_lr: float, largest_lr: float) -> list[Tuple[float, float]]:
@@ -32,7 +32,7 @@ def get_loss_over_lr(model, train_dataloader, optimizer, smallest_lr: float, lar
         step += 1
         update_lr()
         batch = next(dataloader_iterator)
-        batch = {k: v.to(device) for k, v in batch.items()}
+        batch = {k: v.to(DEVICE) for k, v in batch.items()}
         outputs = model(**batch)
         loss = outputs.loss
         history.append((lr, loss.item()))
@@ -49,6 +49,9 @@ def find_lr(history) -> Tuple[float, float]:
     for i in range(len(history)-1):
         lr1, loss1 = history[i]
         lr2, loss2 = history[i+1]
+        # d(Loss)/d(lr) approximation
+        # as difference between lrs differs it may not give best results
+        # TODO: Change it to calculating derivative of loss function approximation with stable difference between each lr
         a = (loss2 - loss1)/(lr2 - lr1)
         dLr.append((lr1, lr2))
         dLoss.append(a)

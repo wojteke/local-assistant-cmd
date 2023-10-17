@@ -5,7 +5,7 @@ class Headers():
     all_headers = [conversation, user, ai]
 
 
-class GPT2Models(str):
+class GPT2Models():
     gpt2 = 'gpt2'
     gpt2_medium = 'gpt2-medium'
     gpt2_large = 'gpt2-large'

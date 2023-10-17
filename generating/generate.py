@@ -12,6 +12,7 @@ from transformers import GPT2LMHeadModel, GPT2Tokenizer
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 QUEUE_BUFFOR_LENGTH = 3
 
+
 class KeywordsStoppingCriteria(StoppingCriteria):
     def __init__(self, stops: list[torch.Tensor] = [], device: str = None):
         super().__init__()
@@ -37,17 +38,16 @@ class ExternalStoppingCriteria(StoppingCriteria):
 def get_response(
         model: GPT2LMHeadModel,
         tokenizer: GPT2Tokenizer,
-        stopping_criteria: StoppingCriteria,
+        stopping_criteria: StoppingCriteria | None,
         conversation: list[str],
-        temperature: float = 1,
+        temperature: float=1,
         top_p=0.5,
         top_k=50,
         num_return_sequences=1,
         max_new_tokens=150):
 
-    prompt = generate_prompt(conversation, add_ai_token=True)
-    encoded = tokenizer(prompt, return_tensors='pt')
-    encoded = encoded.to(DEVICE)
+    prompt = generate_prompt(conversation, end_with_ai_token=True)
+    encoded = tokenizer(prompt, return_tensors='pt').to(DEVICE)
 
     generation_params = {
         "input_ids": encoded['input_ids'],
@@ -76,7 +76,7 @@ def get_response(
 async def get_response_stream(
         model: GPT2LMHeadModel,
         tokenizer: GPT2Tokenizer,
-        stopping_criteria: StoppingCriteria,
+        stopping_criteria: StoppingCriteria | None,
         conversation: list[str],
         temperature: float = 1,
         top_p=0.5,
@@ -84,9 +84,8 @@ async def get_response_stream(
         num_return_sequences=1,
         max_new_tokens=150):
 
-    prompt = generate_prompt(conversation, add_ai_token=True)
-    encoded = tokenizer(prompt, return_tensors='pt')
-    encoded = encoded.to(DEVICE)
+    prompt = generate_prompt(conversation, end_with_ai_token=True)
+    encoded = tokenizer(prompt, return_tensors='pt').to(DEVICE)
 
     q = Queue()
 
@@ -118,23 +117,34 @@ async def get_response_stream(
     worker_thread = threading.Thread(target=worker)
     worker_thread.start()
     buffer = deque(maxlen=QUEUE_BUFFOR_LENGTH)
-    message = prompt
+    accumulated_output = prompt
     while True:
         item = q.get()
         await asyncio.sleep(0.2)
         if item is None:
             break
         new_tokens = tokenizer.decode(item, skip_special_tokens=True)
-        diff = new_tokens.removeprefix(message)
+        diff = new_tokens.removeprefix(accumulated_output)
         buffer.append(diff)
+        accumulated_output += diff
+
         if len(buffer) == QUEUE_BUFFOR_LENGTH:
             buffered = "".join(buffer)
-            if Headers.user in buffered:
-                last_tokens = buffered[:buffered.index(Headers.user)].rstrip()
-                if last_tokens != "":
-                    yield last_tokens
-                break
-            yield buffer[0]
-        message += diff
+            # if model predicted header then the generation should stop
+            for header in Headers.all_headers:
+                if header in buffered:
+                    # get remaining tokens in buffer
+                    last_tokens = buffered[:buffered.index(header)].rstrip()
+                    if last_tokens != "":
+                        yield last_tokens
+                    break
+            # for...else hack to break from nested loop
+            # if inner loop completes without break then this else is called
+            else:
+                yield buffer[0]
+                continue
+            # if the else is not called
+            # then this break will end generation
+            break
 
     worker_thread.join()

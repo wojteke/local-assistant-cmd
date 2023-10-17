@@ -2,32 +2,30 @@ import os
 from peft import PeftConfig, PeftModel, get_peft_model, LoraConfig, TaskType
 from transformers import GPT2LMHeadModel, GPT2Tokenizer
 from typing import Tuple
-
 from core.enums import GPT2Models
 
 
-path_prefix: str = None
+# used in different envs when project has different directory
+PATH_PREFIX: str = None
 
-def save_model(model, model_name: str, use_lora: bool, epoch: int):
-    if path_prefix is not None:
-        path = os.path.join(path_prefix, "models")
+
+def save_model(model: GPT2LMHeadModel | PeftModel, model_name: str, use_lora: bool, epoch: int):
+    if PATH_PREFIX is not None:
+        path = os.path.join(PATH_PREFIX, "models")
     else:
         path = "models"
-    if not os.path.exists(path):
-            os.makedirs(path)
 
-    if use_lora:
-        model.save_pretrained(os.path.join("models", "lora", f"{model_name}_lora_epoch_{epoch}") )
-    else:
-        model.save_pretrained(os.path.join("models", "full", f"{model_name}_epoch_{epoch}"))
-        return
-        
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+    model_save_path = os.path.join("models", "lora", f"{model_name}_lora_epoch_{epoch}") if use_lora else os.path.join(
+        "models", "full", f"{model_name}_epoch_{epoch}")
+
+    model.save_pretrained(model_save_path)
+
 
 def create_gpt2_model(model_name: str, use_lora: bool) -> Tuple[GPT2Tokenizer, GPT2LMHeadModel]:
     tokenizer = GPT2Tokenizer.from_pretrained(model_name)
-
-    # causing issues for some reason
-    # tokenizer.padding_side = 'left'
     tokenizer.pad_token_id = tokenizer.eos_token_id
 
     model = GPT2LMHeadModel.from_pretrained(model_name)
@@ -45,9 +43,6 @@ def create_gpt2_model(model_name: str, use_lora: bool) -> Tuple[GPT2Tokenizer, G
 
 def load_gpt2_model(model_name: str) -> Tuple[GPT2Tokenizer, GPT2LMHeadModel]:
     tokenizer = GPT2Tokenizer.from_pretrained(GPT2Models.gpt2)
-
-    # causing issues for some reason
-    # tokenizer.padding_side = 'left'
     tokenizer.pad_token_id = tokenizer.eos_token_id
 
     if "lora" in model_name:

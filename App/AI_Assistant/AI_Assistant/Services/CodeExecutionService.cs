@@ -1,35 +1,43 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace AI_Assistant.Services;
 
 public class CodeExecutionService
 {
-	public event Action? CommandExecuted;
+    private Process? process;
+    public event Action? CommandExecuted;
 
-	public async Task<string> RunCmdAsync(string commandText)
+	public async Task RunCmdAsync(string directory, string commandText)
 	{
-		using var cmd = new Process();
-		cmd.StartInfo.FileName = "cmd.exe";
-		cmd.StartInfo.RedirectStandardInput = true;
-		//cmd.StartInfo.RedirectStandardOutput = true;
-		cmd.StartInfo.CreateNoWindow = false;
-		cmd.StartInfo.UseShellExecute = false;
-		cmd.Start();
+        // storing the instance to avoid disposing the Process
+        process = new Process();
+        process.StartInfo.FileName = "cmd.exe";
+        process.StartInfo.RedirectStandardInput = true;
+        process.StartInfo.CreateNoWindow = false;
+        process.StartInfo.UseShellExecute = false;
+        process.Start();
+        
+        ChangeDirectory(process, directory);
 
-		foreach(var line in commandText.Split("\n"))
+        foreach (var line in commandText.Split("\n"))
 		{
-			cmd.StandardInput.WriteLine(line);
+            process.StandardInput.WriteLine(line);
 		}
-		cmd.StandardInput.Flush();
+
+        process.StandardInput.Flush();
 		await Task.Delay(500);
-		//cmd.StandardInput.Close();
-		//await cmd.WaitForExitAsync();
 		CommandExecuted?.Invoke();
-		return ""; return await cmd.StandardOutput.ReadToEndAsync();
 	}
+
+    private static void ChangeDirectory(Process process, string directory) 
+    {
+        var driveRoot = Path.GetPathRoot(directory);
+        // change drive
+        process.StandardInput.WriteLine(driveRoot.TrimEnd('\\'));
+        // change directory
+        process.StandardInput.WriteLine("cd " + directory);
+    }
 }
